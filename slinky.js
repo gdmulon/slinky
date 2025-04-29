@@ -126,6 +126,8 @@ class Slinky {
   }
 
   bindEvents() {
+    this.initPreview();
+    
     // Mouse move event
     document.addEventListener('mousemove', (e) => {
       this.handlePointerMove(e.clientX, e.clientY);
@@ -162,6 +164,7 @@ class Slinky {
 
     this.customizeToggleBtn.addEventListener('click', () => {
       this.customizeMenu.classList.remove('hidden');
+      this.updatePreview();
     });
 
     this.closeMenuBtn.addEventListener('click', () => {
