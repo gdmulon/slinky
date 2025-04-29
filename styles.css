@@ -96,6 +96,27 @@ body {
   padding: 30px;
   border-radius: 10px;
   min-width: 300px;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menu-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu-content::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.menu-content::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+}
+
+.menu-content::-webkit-scrollbar-thumb:hover {
+  background: #606060;
 }
 
 .menu-content h2 {
@@ -338,9 +359,11 @@ body {
 
   .menu-content {
     max-width: 90%;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow-y: auto;
     padding: 20px;
+    margin: 20px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .advanced-colors-grid {
