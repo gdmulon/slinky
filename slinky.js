@@ -302,7 +302,7 @@ class Slinky {
       const value = parseFloat(e.target.value);
       this.gravity = value;
       this.gravityValue.textContent = value.toFixed(1);
-    }, { passive: false });
+    });
 
     this.spacingSlider.addEventListener('input', (e) => {
       const value = parseFloat(e.target.value);
@@ -313,12 +313,16 @@ class Slinky {
       this.sticks.forEach(stick => {
         stick.length = value;
       });
-    }, { passive: false });
+    });
 
-    // Prevent scrolling when touching sliders
+    // Remove the preventDefault on slider touch events
     [this.gravitySlider, this.spacingSlider].forEach(slider => {
-      slider.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-      slider.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+      slider.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+      });
+      slider.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+      });
     });
 
     // Add advanced mode toggle handler
