@@ -355,27 +355,33 @@ body {
     height: 20px;  
     background: #1a1a1a;
     border-radius: 10px;
+    touch-action: none;  
+    -webkit-tap-highlight-color: transparent; 
   }
 
   #spacing-slider::-webkit-slider-thumb, #gravity-slider::-webkit-slider-thumb {
-    width: 28px;  
-    height: 28px;
+    width: 32px;  
+    height: 32px;
     background: #ff6b6b;
     border: 2px solid #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    touch-action: none;
   }
 
   #spacing-slider::-moz-range-thumb, #gravity-slider::-moz-range-thumb {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background: #ff6b6b;
     border: 2px solid #fff;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    touch-action: none;
   }
 
   .slider-section {
     margin: 20px 0;  
     padding: 15px;   
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .slider-container {

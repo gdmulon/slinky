@@ -297,6 +297,30 @@ class Slinky {
       }
     });
 
+    // Update the slider event listeners
+    this.gravitySlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      this.gravity = value;
+      this.gravityValue.textContent = value.toFixed(1);
+    }, { passive: false });
+
+    this.spacingSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      this.ringSpacing = value;
+      this.spacingValue.textContent = value.toFixed(1);
+      
+      // Update stick lengths immediately
+      this.sticks.forEach(stick => {
+        stick.length = value;
+      });
+    }, { passive: false });
+
+    // Prevent scrolling when touching sliders
+    [this.gravitySlider, this.spacingSlider].forEach(slider => {
+      slider.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+      slider.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    });
+
     // Add advanced mode toggle handler
     this.advancedToggle.addEventListener('change', (e) => {
       this.isAdvancedMode = e.target.checked;
@@ -313,25 +337,8 @@ class Slinky {
       this.updatePreview();
     });
 
-    this.gravitySlider.addEventListener('input', (e) => {
-      const value = parseFloat(e.target.value);
-      this.gravity = value;
-      this.gravityValue.textContent = value.toFixed(1);
-    });
-
     this.resetButton.addEventListener('click', () => {
       this.reset();
-    });
-
-    this.spacingSlider.addEventListener('input', (e) => {
-      const value = parseFloat(e.target.value);
-      this.ringSpacing = value;
-      this.spacingValue.textContent = value.toFixed(1);
-      
-      // Update stick lengths immediately
-      this.sticks.forEach(stick => {
-        stick.length = value;
-      });
     });
   }
 
