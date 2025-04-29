@@ -126,16 +126,17 @@ class Slinky {
   }
 
   bindEvents() {
+    // Mouse move event
     document.addEventListener('mousemove', (e) => {
-      this.mousePos = { x: e.clientX, y: e.clientY };
-      
-      if (this.isDragging && this.draggedPointIndex !== null) {
-        this.points[this.draggedPointIndex].x = e.clientX;
-        this.points[this.draggedPointIndex].y = e.clientY;
-        this.points[this.draggedPointIndex].oldX = e.clientX;
-        this.points[this.draggedPointIndex].oldY = e.clientY;
-      }
+      this.handlePointerMove(e.clientX, e.clientY);
     });
+
+    // Touch move event
+    document.addEventListener('touchmove', (e) => {
+      e.preventDefault(); // Prevent scrolling
+      const touch = e.touches[0];
+      this.handlePointerMove(touch.clientX, touch.clientY);
+    }, { passive: false });
 
     this.modeToggleBtn.addEventListener('click', () => {
       this.isFollowMode = !this.isFollowMode;
@@ -179,22 +180,22 @@ class Slinky {
       this.pattern = e.target.value;
     });
 
-    document.addEventListener('mousedown', (e) => {
+    // Combine mouse and touch down events
+    const handlePointerDown = (x, y) => {
       if (!this.isFollowMode) {
         const rect = this.container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const touchX = x - rect.left;
+        const touchY = y - rect.top;
         
-        // Find the closest ring to the click
         let closestDist = Infinity;
         let closestIndex = -1;
         
         this.points.forEach((point, index) => {
-          const dx = point.x - e.clientX;
-          const dy = point.y - e.clientY;
+          const dx = point.x - x;
+          const dy = point.y - y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           
-          if (dist < closestDist && dist < 30) { // 30px threshold for clicking
+          if (dist < closestDist && dist < 50) { 
             closestDist = dist;
             closestIndex = index;
           }
@@ -206,9 +207,19 @@ class Slinky {
           this.rings[closestIndex].style.cursor = 'grabbing';
         }
       }
+    };
+
+    document.addEventListener('mousedown', (e) => {
+      handlePointerDown(e.clientX, e.clientY);
     });
 
-    document.addEventListener('mouseup', () => {
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      handlePointerDown(touch.clientX, touch.clientY);
+    });
+
+    // Combine mouse and touch up events
+    const handlePointerUp = () => {
       if (this.isDragging) {
         this.isDragging = false;
         if (this.draggedPointIndex !== null) {
@@ -221,7 +232,22 @@ class Slinky {
           ring.style.cursor = this.isFollowMode ? 'none' : 'grab';
         });
       }
-    });
+    };
+
+    document.addEventListener('mouseup', handlePointerUp);
+    document.addEventListener('touchend', handlePointerUp);
+
+    // Add this new method to handle pointer movement
+    this.handlePointerMove = (x, y) => {
+      this.mousePos = { x, y };
+      
+      if (this.isDragging && this.draggedPointIndex !== null) {
+        this.points[this.draggedPointIndex].x = x;
+        this.points[this.draggedPointIndex].y = y;
+        this.points[this.draggedPointIndex].oldX = x;
+        this.points[this.draggedPointIndex].oldY = y;
+      }
+    };
 
     this.rainbowToggle.addEventListener('change', (e) => {
       if (this.isAdvancedMode) {
